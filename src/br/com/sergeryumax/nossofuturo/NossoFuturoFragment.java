@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,6 +33,7 @@ import android.widget.VideoView;
 
 public class NossoFuturoFragment extends Fragment implements OnClickListener, OnCompletionListener{
 
+	private static final String TAG = "NossoFuturoFragment";
 	private View faceLeft;
 	private View faceRight;
 	private int widthCenter;
@@ -91,6 +93,8 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 		widthScreen = displaymetrics.widthPixels;
 		widthCenter = (widthScreen / 2) - 140;
 		
+		Log.d(TAG, "Tamanho tela: " + widthScreen + ":" + heightScreen);
+		
 		new AsyncTask<Void, Void, Void>() {
 			@Override
 			protected Void doInBackground(Void... params) {
@@ -146,6 +150,7 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 		myHandler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
+				heartImg.setVisibility(View.VISIBLE);
 				heartImg.animate().alpha(1.f).setDuration(500).start();
 				
 				Animation resizeAnim = new ResizeAnimation(heartImg, (int)(heightScreen*0.8f), (int)(widthScreen*0.8f));
@@ -174,7 +179,7 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 							}
 						});
 						heartImg.startAnimation(resizeAnim);
-						initialContent.animate().alpha(0f).setDuration(1000).start();
+						initialContent.animate().alpha(0f).setDuration(800).start();
 					}
 				});
 				
@@ -185,6 +190,7 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 	private void startVideoSection() {
         // Create our Preview view and set it as the content of our activity.
         cameraPreview = new CameraPreview(getActivity(), mCamera);
+        mPreviewLayer.setVisibility(View.VISIBLE);
         mPreviewLayer.addView(cameraPreview);
         
 		video_content_mask.animate().alpha(0f).setDuration(1000).withEndAction(new Runnable() {

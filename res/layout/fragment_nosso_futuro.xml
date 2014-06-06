@@ -4,95 +4,97 @@
     android:layout_height="match_parent"
     tools:context="br.com.sergeryumax.nossofuturo.NossoFuturo$PlaceholderFragment" 
     android:background="@drawable/red_background">
-
+	    
     <RelativeLayout android:id="@+id/initial_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-	    android:paddingLeft="@dimen/activity_horizontal_margin"
-	    android:paddingRight="@dimen/activity_horizontal_margin"
-	    android:paddingTop="@dimen/activity_vertical_margin">
-        
-        <TextView
-	        android:id="@+id/futuro_label"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
-	        android:layout_marginTop="30dp"
-	        android:layout_centerHorizontal="true"
-	        android:text="@string/app_ver_futuro" 
-	        android:textColor="@color/red_light"
-	        android:textSize="20sp"
-	        android:textStyle="bold"
-	        />
-	    <Button android:id="@+id/ver_futuro_btn"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_centerInParent="true"
-	        android:layout_centerHorizontal="true"
-	        android:text="@string/ver_futuro"
-	        android:background="@drawable/red_button"
-	       	style="@style/button_text_red"/>
-	    
-	    <ImageView android:id="@+id/face_left_img"
-	        android:layout_height="100dp"
-	        android:layout_width="100dp"
-	        android:layout_toLeftOf="@id/ver_futuro_btn"
-	        android:scaleType="centerInside"
-	        android:layout_centerVertical="true"
-	        android:src="@drawable/ic_launcher"
-	        android:layout_marginRight="20dp"/>
-	    
-	    <ImageView android:id="@+id/face_right_img"
-	        android:layout_height="100dp"
-	        android:layout_width="100dp"
-	        android:layout_toRightOf="@id/ver_futuro_btn"
-	        android:scaleType="centerInside"
-	        android:layout_centerVertical="true"
-	        android:src="@drawable/ic_launcher"
-	        android:layout_marginLeft="20dp"/>
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:visibility="visible"
+	        android:layout_marginBottom="@dimen/activity_vertical_margin_bottom"
+		    android:layout_marginLeft="@dimen/activity_horizontal_margin_left"
+		    android:layout_marginRight="@dimen/activity_horizontal_margin_right"
+		    android:layout_marginTop="@dimen/activity_vertical_margin_top">
+	        
+	        <TextView
+		        android:id="@+id/futuro_label"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignParentTop="true"
+		        android:layout_centerHorizontal="true"
+		        android:text="@string/app_ver_futuro" 
+		        android:textColor="@color/red_light"
+		        android:textSize="20sp"
+		        android:textStyle="bold"
+		        />
+		    <Button android:id="@+id/ver_futuro_btn"
+		        android:layout_width="300dp"
+		        android:layout_height="wrap_content"
+		        android:layout_centerInParent="true"
+		        android:layout_centerHorizontal="true"
+		        android:text="@string/ver_futuro"
+		        android:background="@drawable/red_button"
+		       	style="@style/button_text_red"/>
+		    
+		    <ImageView android:id="@+id/face_left_img"
+		        android:layout_height="@dimen/faces_photo"
+		        android:layout_width="@dimen/faces_photo"
+		        android:layout_toLeftOf="@id/ver_futuro_btn"
+		        android:scaleType="centerInside"
+		        android:layout_centerVertical="true"
+		        android:src="@drawable/ic_launcher"
+		        android:layout_marginRight="10dp"/>
+		    
+		    <ImageView android:id="@+id/face_right_img"
+		        android:layout_height="@dimen/faces_photo"
+		        android:layout_width="@dimen/faces_photo"
+		        android:layout_toRightOf="@id/ver_futuro_btn"
+		        android:scaleType="centerInside"
+		        android:layout_centerVertical="true"
+		        android:src="@drawable/ic_launcher"
+		        android:layout_marginLeft="10dp"/>
+		
+		    <ImageView android:id="@+id/heart_img"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:scaleType="fitCenter"
+		        android:layout_centerInParent="true"
+		        android:src="@drawable/love"
+		        android:visibility="gone"
+		        android:alpha="0"/>
+	</RelativeLayout>
 	
-	    <ImageView android:id="@+id/heart_img"
-	        android:layout_height="wrap_content"
-	        android:layout_width="wrap_content"
-	        android:scaleType="fitCenter"
-	        android:layout_centerInParent="true"
-	        android:src="@drawable/love"
-	        android:alpha="0"/>
-    </RelativeLayout>
-    
     <RelativeLayout android:id="@+id/video_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-	    android:paddingLeft="@dimen/activity_horizontal_margin"
-	    android:paddingRight="@dimen/activity_horizontal_margin"
-	    android:paddingTop="@dimen/activity_vertical_margin">
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/activity_vertical_margin_bottom"
+	    android:layout_marginLeft="@dimen/activity_horizontal_margin_left"
+	    android:layout_marginRight="@dimen/activity_horizontal_margin_right"
+	    android:layout_marginTop="@dimen/activity_vertical_margin_top">
 	    
 	    <VideoView
 	            android:id="@+id/videoPlayerComponent"
 	            android:layout_width="match_parent"
 	            android:layout_height="match_parent" 
-	            android:visibility="invisible"/>
+	            android:visibility="gone"/>
 	    <FrameLayout
 		    android:id="@+id/camera_preview_layer"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
+		    android:visibility="gone"
 		    />
 	    <View 
 	        android:id="@+id/video_content_mask_in"
-	        android:background="@drawable/red_background" 
+	        android:background="@drawable/red_background"
 	        android:layout_width="match_parent"
 	       	android:layout_height="match_parent"
-	       	android:visibility="invisible"/>
+	       	android:visibility="gone"/>
 	    
     </RelativeLayout>
     
-	<FrameLayout
+    <FrameLayout
 		    android:id="@+id/camera_preview_micro_layer"
-		    android:layout_width="120dp"
-		    android:layout_height="70dp"
+		    android:layout_width="@dimen/preview_micro_width"
+		    android:layout_height="@dimen/preview_micro_heigth"
 		    android:layout_alignParentLeft="true"
 		    android:layout_alignParentTop="true"
         	android:layout_marginLeft="2dp"
@@ -102,5 +104,13 @@
         android:background="@drawable/red_background" 
         android:layout_width="match_parent"
        	android:layout_height="match_parent"
-       	android:visibility="invisible"/>
+       	android:visibility="gone"/>
+    
+	<RelativeLayout android:id="@+id/hearts_layer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        android:background="@drawable/heart_background">
+		    
+	</RelativeLayout>
 </RelativeLayout>
