@@ -61,4 +61,19 @@
 	        android:alpha="0"/>
     </RelativeLayout>
     
+    <RelativeLayout android:id="@+id/video_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+	    <VideoView
+	            android:id="@+id/videoPlayerComponent"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent" />
+	    <View 
+	        android:id="@+id/video_content_mask"
+	        android:background="@drawable/red_background" 
+	        android:layout_width="match_parent"
+        	android:layout_height="match_parent"/>
+    </RelativeLayout>
+    
 </RelativeLayout>

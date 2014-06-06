@@ -3,6 +3,10 @@ package br.com.sergeryumax.nossofuturo;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnPreparedListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -16,9 +20,12 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 
-public class NossoFuturoFragment extends Fragment implements OnClickListener {
+public class NossoFuturoFragment extends Fragment implements OnClickListener, OnCompletionListener{
 
 	private View faceLeft;
 	private View faceRight;
@@ -29,6 +36,9 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener {
 	private Handler myHandler;
 	private View heartImg;
 	private View initialContent;
+	private View videoContent;
+	private VideoView videoPlayerComp;
+	private View video_content_mask;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,6 +48,13 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener {
 		
 		myHandler = new Handler();
 		
+		prepareInitialSection(rootView);
+		prepareVideoSection(rootView);
+		
+		return rootView;
+	}
+
+	private void prepareInitialSection(View rootView) {
 		initialContent = rootView.findViewById(R.id.initial_content);
 		myVerFuturoBtn = (Button) rootView.findViewById(R.id.ver_futuro_btn);
 		myVerFuturoBtn.setOnClickListener(this);
@@ -62,8 +79,35 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener {
 		heightScreen = displaymetrics.heightPixels;
 		widthScreen = displaymetrics.widthPixels;
 		widthCenter = (widthScreen / 2) - 140;
+	}
+
+	private void prepareVideoSection(View rootView) {
+		videoContent = rootView.findViewById(R.id.video_content);
+		video_content_mask = rootView.findViewById(R.id.video_content_mask);
 		
-		return rootView;
+		videoPlayerComp = (VideoView) rootView.findViewById(R.id.videoPlayerComponent);
+		videoPlayerComp.setVideoURI(Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.video_teste));
+		final MediaController mediaController = new MediaController(getActivity());
+		videoPlayerComp.setMediaController(mediaController);
+		videoPlayerComp.setOnPreparedListener(new OnPreparedListener() {
+			
+			@Override
+			public void onPrepared(MediaPlayer mp) {
+				int childs = mediaController.getChildCount();
+			    for (int i = 0; i < childs; i++)
+			    {
+			        View child = mediaController.getChildAt (i);
+			        child.setVisibility (View.GONE);
+			    }
+			}
+		});
+		
+		videoPlayerComp.setOnCompletionListener(this);
+	}
+	
+	@Override
+	public void onCompletion(MediaPlayer mp) {
+		askQuestion();
 	}
 	
 	@Override
@@ -112,6 +156,7 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener {
 							@Override
 							public void onAnimationEnd(Animation animation) {
 								initialContent.setVisibility(View.GONE);
+								videoContent.setVisibility(View.VISIBLE);
 								startVideo();
 							}
 						});
@@ -125,7 +170,13 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener {
 	}
 	
 	private void startVideo() {
-		
+		videoPlayerComp.requestFocus();
+		videoPlayerComp.start();
+		video_content_mask.animate().alpha(0f).setDuration(1000).start();
+	}
+	
+	private void askQuestion() {
+		video_content_mask.animate().alpha(1f).setDuration(300).start();
 	}
 	
 }
