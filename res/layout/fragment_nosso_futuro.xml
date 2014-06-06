@@ -2,16 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="br.com.sergeryumax.nossofuturo.NossoFuturo$PlaceholderFragment" 
     android:background="@drawable/red_background">
 
     <RelativeLayout android:id="@+id/initial_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin">
         
         <TextView
 	        android:id="@+id/futuro_label"
@@ -64,16 +64,43 @@
     <RelativeLayout android:id="@+id/video_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+	    android:paddingLeft="@dimen/activity_horizontal_margin"
+	    android:paddingRight="@dimen/activity_horizontal_margin"
+	    android:paddingTop="@dimen/activity_vertical_margin">
+	    
 	    <VideoView
 	            android:id="@+id/videoPlayerComponent"
 	            android:layout_width="match_parent"
-	            android:layout_height="match_parent" />
+	            android:layout_height="match_parent" 
+	            android:visibility="invisible"/>
+	    <FrameLayout
+		    android:id="@+id/camera_preview_layer"
+		    android:layout_width="match_parent"
+		    android:layout_height="match_parent"
+		    />
 	    <View 
-	        android:id="@+id/video_content_mask"
+	        android:id="@+id/video_content_mask_in"
 	        android:background="@drawable/red_background" 
 	        android:layout_width="match_parent"
-        	android:layout_height="match_parent"/>
+	       	android:layout_height="match_parent"
+	       	android:visibility="invisible"/>
+	    
     </RelativeLayout>
     
+	<FrameLayout
+		    android:id="@+id/camera_preview_micro_layer"
+		    android:layout_width="120dp"
+		    android:layout_height="70dp"
+		    android:layout_alignParentLeft="true"
+		    android:layout_alignParentTop="true"
+        	android:layout_marginLeft="2dp"
+    		android:layout_marginTop="2dp"/>
+    <View 
+        android:id="@+id/video_content_mask"
+        android:background="@drawable/red_background" 
+        android:layout_width="match_parent"
+       	android:layout_height="match_parent"
+       	android:visibility="invisible"/>
 </RelativeLayout>
