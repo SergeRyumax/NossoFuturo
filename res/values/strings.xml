@@ -4,5 +4,6 @@
     <string name="app_name">NossoFuturo</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="app_ver_futuro">Por meio desse aplicativo é possivel ver o futuro</string>
+    <string name="ver_futuro">Quero ver nosso futuro</string>
 </resources>

@@ -1,7 +1,6 @@
 package br.com.sergeryumax.nossofuturo;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,18 +8,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 
-public class NossoFuturo extends Activity {
+public class NossoFuturo extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_nosso_futuro);
-
+		
 		if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+					.add(R.id.container, new NossoFuturoFragment()).commit();
 		}
 	}
 
@@ -60,5 +58,4 @@ public class NossoFuturo extends Activity {
 			return rootView;
 		}
 	}
-
 }
