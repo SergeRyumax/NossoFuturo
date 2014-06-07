@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -67,6 +66,7 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 	private MediaRecorder mMediaRecorder;
 	private boolean isRecording = false;
 	private static Uri mCurrentVideoUri;
+	private MediaPlayer musicIntroPlayer;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -145,6 +145,28 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 		videoPlayerComp.setOnCompletionListener(this);
 	}
 	
+	private void prepareMusicIntro() {
+		myHandler.post(new Runnable() {
+
+			@Override
+			public void run() {
+				musicIntroPlayer = MediaPlayer.create(getActivity(), R.raw.music_intro);
+
+		        try {
+		            musicIntroPlayer.prepare();
+		        } catch (IllegalStateException e) {
+		            // TODO Auto-generated catch block
+		            e.printStackTrace();
+		        } catch (IOException e) {
+		            // TODO Auto-generated catch block
+		            e.printStackTrace();
+		        }
+
+		        musicIntroPlayer.start();
+			}
+		});
+	}
+	
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		askQuestion();
@@ -153,6 +175,7 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 	@Override
 	public void onClick(View v) {
 		if (v.getId() == R.id.ver_futuro_btn){
+			prepareMusicIntro();
 			playAnimation();
 		}
 	}
@@ -242,6 +265,8 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 		releaseMediaRecorder();
 		if (cameraPreview != null)
 			cameraPreview.stopPreviewAndFreeCamera();
+		musicIntroPlayer.stop();
+		musicIntroPlayer.release();
 		super.onPause();
 	}
 	
