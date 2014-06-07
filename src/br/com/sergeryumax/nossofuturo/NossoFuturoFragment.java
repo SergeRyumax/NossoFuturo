@@ -23,6 +23,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -152,8 +153,10 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 
 			@Override
 			public void run() {
+				
 				musicIntroPlayer = MediaPlayer.create(getActivity(), R.raw.music_intro);
-
+				musicIntroPlayer.setWakeMode(getActivity().getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+				
 		        try {
 		            musicIntroPlayer.prepare();
 		        } catch (IllegalStateException e) {
@@ -263,7 +266,7 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 	}
 	
 	@Override
-	public void onPause() {
+	public void onPause() {	
 		releaseMediaRecorder();
 		if (cameraPreview != null)
 			cameraPreview.stopPreviewAndFreeCamera();
