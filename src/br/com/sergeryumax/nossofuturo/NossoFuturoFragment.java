@@ -6,11 +6,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
+import android.media.AudioManager;
 import android.media.CamcorderProfile;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -265,9 +267,32 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 		releaseMediaRecorder();
 		if (cameraPreview != null)
 			cameraPreview.stopPreviewAndFreeCamera();
-		musicIntroPlayer.stop();
-		musicIntroPlayer.release();
+		
+		setVolumeDownGradually();
+		
 		super.onPause();
+	}
+
+	private void setVolumeDownGradually() {
+		myHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				AudioManager audio = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
+				int streamVolume = audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+				
+				for (int i = streamVolume; i >= 0; i--) {
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					audio.setStreamVolume(AudioManager.STREAM_MUSIC, i, 0);
+				}
+				musicIntroPlayer.stop();
+				musicIntroPlayer.release();
+			}
+		});
 	}
 	
 	private void startVideoPlayback() {

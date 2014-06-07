@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="br.com.sergeryumax.nossofuturo.NossoFuturo$PlaceholderFragment" 
-    android:background="@drawable/red_background">
+    android:background="@drawable/red_background"
+    android:keepScreenOn="true">
 	    
     <RelativeLayout android:id="@+id/initial_content"
 	        android:layout_width="match_parent"
