@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item android:drawable="@drawable/f68" android:duration="2000" />
+    <item android:drawable="@drawable/heart1" android:duration="2000" />
+    <item android:drawable="@drawable/heart2" android:duration="2000" />
+    <item android:drawable="@drawable/heart3" android:duration="2000" />
+    <item android:drawable="@drawable/heart4" android:duration="2000" />
+    <item android:drawable="@drawable/heart5" android:duration="2000" />
+    <item android:drawable="@drawable/heart6" android:duration="2000" />
+    <item android:drawable="@drawable/heart7" android:duration="2000" />
+    <item android:drawable="@drawable/heart8" android:duration="2000" />
+    <item android:drawable="@drawable/heart9" android:duration="2000" />
+    <item android:drawable="@drawable/heart10" android:duration="2000" />
+    <item android:drawable="@drawable/heart11" android:duration="2000" />
+    <item android:drawable="@drawable/heart12" android:duration="2000" />
+    
+</animation-list>

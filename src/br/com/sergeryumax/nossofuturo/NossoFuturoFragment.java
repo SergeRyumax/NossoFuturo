@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.media.AudioManager;
@@ -59,7 +60,7 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 	private View initialContent;
 	private RelativeLayout videoContent;
 	private VideoView videoPlayerComp;
-	private View video_content_mask;
+	private View video_content_mask, video_content_mask_in;
 	private Camera mCamera;
 	private FrameLayout mPreviewLayer;
 	private FrameLayout mMicroPreviewLayer;
@@ -70,6 +71,8 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 	private boolean isRecording = false;
 	private static Uri mCurrentVideoUri;
 	private MediaPlayer musicIntroPlayer;
+	private AnimationDrawable fotosSeq1Animation;
+	private ImageView fotosSeq1;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,8 +84,25 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 		
 		prepareInitialSection(rootView);
 		prepareVideoSection(rootView, Uri.parse("android.resource://" + getActivity().getPackageName() + "/" + R.raw.video_teste));
+		prepareFotosSection(rootView);
 		
 		return rootView;
+	}
+
+	private void prepareFotosSection(View rootView2) {
+		myHandler.post(new Runnable() {
+			@Override
+			public void run() {
+				fotosSeq1 = (ImageView)rootView.findViewById(R.id.fotos_seq1);
+				fotosSeq1.setOnClickListener(NossoFuturoFragment.this);
+				fotosSeq1.setBackgroundResource(R.drawable.fotos_seq1);
+				fotosSeq1Animation = (AnimationDrawable) fotosSeq1.getBackground();
+				fotosSeq1Animation.setEnterFadeDuration(250);
+				fotosSeq1Animation.setExitFadeDuration(400);
+				fotosSeq1Animation.setOneShot(true);
+			}
+		});
+		
 	}
 
 	private void prepareInitialSection(View rootView) {
@@ -127,6 +147,7 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 		mMicroPreviewLayer = (FrameLayout) rootView.findViewById(R.id.camera_preview_micro_layer);
 		videoContent = (RelativeLayout)rootView.findViewById(R.id.video_content);
 		video_content_mask = rootView.findViewById(R.id.video_content_mask);
+		video_content_mask_in = rootView.findViewById(R.id.video_content_mask_in);
 		
 		videoPlayerComp = (VideoView) rootView.findViewById(R.id.videoPlayerComponent);
 		videoPlayerComp.setVideoURI(videoUri);
@@ -156,25 +177,34 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 				
 				musicIntroPlayer = MediaPlayer.create(getActivity(), R.raw.music_intro);
 				musicIntroPlayer.setWakeMode(getActivity().getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+				musicIntroPlayer.setOnPreparedListener(new OnPreparedListener() {
+					@Override
+					public void onPrepared(MediaPlayer mp) {
+						musicIntroPlayer.start();
+					}
+				});
+				musicIntroPlayer.setOnCompletionListener(new OnCompletionListener() {
+					@Override
+					public void onCompletion(MediaPlayer mp) {
+						//TODO
+					}
+				});
 				
 		        try {
-		            musicIntroPlayer.prepare();
+		            musicIntroPlayer.prepareAsync();
 		        } catch (IllegalStateException e) {
 		            // TODO Auto-generated catch block
 		            e.printStackTrace();
-		        } catch (IOException e) {
-		            // TODO Auto-generated catch block
-		            e.printStackTrace();
-		        }
+		        };
 
-		        musicIntroPlayer.start();
+		        
 			}
 		});
 	}
 	
 	@Override
 	public void onCompletion(MediaPlayer mp) {
-		askQuestion();
+		startPhotos();
 	}
 	
 	@Override
@@ -182,6 +212,11 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 		if (v.getId() == R.id.ver_futuro_btn){
 			prepareMusicIntro();
 			playAnimation();
+		}
+		if (v.getId() == R.id.fotos_seq1){
+			if (isRecording){
+				startStopRecording();
+			}
 		}
 	}
 
@@ -245,9 +280,12 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 						video_content_mask.animate().alpha(1f).setDuration(300).withEndAction(new Runnable() {
 							@Override
 							public void run() {
-								cameraPreview.setCanRecord(true);
+								cameraPreview.stopPreviewAndFreeCamera();
 								mPreviewLayer.removeAllViews();
 								videoContent.removeView(mPreviewLayer);
+								cameraPreview.setCanRecord(true);
+								mCamera = getCameraInstance();
+								cameraPreview.setCamera(mCamera);
 								mMicroPreviewLayer.addView(cameraPreview);
 								videoContent.requestLayout();
 								rootView.requestLayout();
@@ -267,10 +305,13 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 	
 	@Override
 	public void onPause() {	
-		releaseMediaRecorder();
 		if (cameraPreview != null)
 			cameraPreview.stopPreviewAndFreeCamera();
 		
+		fotosSeq1Animation.stop();
+		if (isRecording){
+			startStopRecording();
+		}
 		setVolumeDownGradually();
 		
 		super.onPause();
@@ -299,11 +340,11 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 	}
 	
 	private void startVideoPlayback() {
-		getActivity().findViewById(R.id.video_content_mask_in).setVisibility(View.VISIBLE);
+		video_content_mask_in.setVisibility(View.VISIBLE);
 		videoPlayerComp.setVisibility(View.VISIBLE);
 		videoPlayerComp.requestFocus();
 		videoPlayerComp.start();
-		getActivity().findViewById(R.id.video_content_mask_in).animate().alpha(0f).setDuration(1000).start();
+		video_content_mask_in.animate().alpha(0f).setDuration(1000).start();
 	}
 	
 	/** A safe way to get an instance of the Camera object. */
@@ -328,9 +369,18 @@ public class NossoFuturoFragment extends Fragment implements OnClickListener, On
 	    return myCamera; // returns null if camera is unavailable
 	}
 	
-	private void askQuestion() {
-		video_content_mask.animate().alpha(1f).setDuration(300).start();
-		startStopRecording();
+	private void startPhotos() {
+		video_content_mask_in.animate().alpha(1f).setDuration(300).withEndAction(new Runnable() {
+			@Override
+			public void run() {
+				videoPlayerComp.stopPlayback();
+				videoPlayerComp.setVisibility(View.GONE);
+				fotosSeq1.setVisibility(View.VISIBLE);
+				fotosSeq1Animation.start();
+				video_content_mask_in.animate().alpha(0f).setDuration(300);
+			}
+		});
+//		startStopRecording();
 	}
 	
 	private boolean prepareVideoRecorder(){
